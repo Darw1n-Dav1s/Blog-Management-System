@@ -1,45 +1,45 @@
-const express = require("express")
-const mongoose = require("mongoose")
+const express = require("express");
+const mongoose = require("mongoose");
 
-const Blog = require("./models/blog")
-const app = express()
+const Blog = require("./models/blog");
+const app = express();
 
-const dbURL = "mongodb+srv://test:test123@nodetuts.skv8yvf.mongodb.net/"
+const dbURL = "mongodb+srv://blog-github:mwoneorublog@blog.9oblmfg.mongodb.net/";
 
-app.set("view engine", "ejs")
+app.set("view engine", "ejs");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
+// Connect to MongoDB
 mongoose.connect(dbURL).then(() => {
-  console.log("mongo connected")
-  app.listen(3000)
+  console.log("mongo connected");
+  app.listen(3000);
 }).catch((err) => {
-  console.log(err)
-})
+  console.log(err);
+});
 
-app.get("/",(req,res)=>{  
-  res.redirect("/blogs")
-})
+// Routes
+app.get("/", (req, res) => {
+  res.redirect("/blogs");
+});
 
-app.get("/about",(req,res)=>{
-  res.render("about",{title:"About Page"})
-})
+app.get("/about", (req, res) => {
+  res.render("about", { title: "About Page" });
+});
 
-app.get("/blogs",(req,res)=>{
+app.get("/blogs", (req, res) => {
   Blog.find()
-    .then((result)=>{
-      res.render("index",{title: "Homepage", blogs: result})
+    .then((result) => {
+      res.render("index", { title: "Homepage", blogs: result });
     })
-    .catch((err)=>{
-      console.log(err)
-      res.render("404", {title: "404 Page"})
-    })
-})
+    .catch((err) => {
+      console.log(err);
+      res.render("404", { title: "404 Page" });
+    });
+});
 
-
-app.post("/blogs",(req,res)=>{
+app.post("/blogs", (req, res) => {
   const blog = new Blog({
     title: req.body.title,
     snippet: req.body.snippet,
@@ -47,38 +47,49 @@ app.post("/blogs",(req,res)=>{
   });
 
   blog.save()
-    .then((result)=>{
-      res.redirect("/blogs")
+    .then((result) => {
+      res.redirect("/blogs");
     })
-    .catch((err)=>{
-      console.log(err)
-      res.render("create", {title: "New Blog", error: "Error saving the blog."})
+    .catch((err) => {
+      console.log(err);
+      res.render("create", { title: "New Blog", error: "Error saving the blog." });
+    });
+});
+
+app.get("/blogs/create", (req, res) => {
+  res.render("create", { title: "New Blog" });
+});
+
+// 🔥 New: Single blog view
+app.get("/blogs/:id", (req, res) => {
+  const id = req.params.id;
+  Blog.findById(id)
+    .then(result => {
+      if (result) {
+        res.render("blog-details", { blog: result, title: result.title });
+      } else {
+        res.render("404", { title: "Blog Not Found" });
+      }
     })
-})
+    .catch(err => {
+      console.log(err);
+      res.render("404", { title: "Blog Not Found" });
+    });
+});
 
-app.get("/blogs/create",(req,res)=>{
-  res.render("create",{title: "New Blog"})
-})
+app.get("/about-us", (req, res) => {
+  res.redirect("/about");
+});
 
-app.get("/about-us",(req,res)=>{
-  res.redirect("/about")
-})
+// 404 handler
+app.use((req, res) => {
+  res.render("404", { title: "404 Page" });
+});
 
-app.use((req,res)=>{
-  res.render("404",{title: "404 Page"})
-})
-
-
+// Graceful shutdown
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {
-    console.log('MongoDB connection closed.')
-    process.exit(0)
-  })
-})
-
-
-
-
-
-
-
+    console.log('MongoDB connection closed.');
+    process.exit(0);
+  });
+});
