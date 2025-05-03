@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Blog = require("./models/blog");
 const app = express();
 
-const dbURL = "mongodb+srv://blog-github:mwoneorublog@blog.9oblmfg.mongodb.net/";
+const dbURL = " MongoDB cluster link ";  //Connect Your Mongodb cluster ( Add the link of connection here)
 
 app.set("view engine", "ejs");
 
