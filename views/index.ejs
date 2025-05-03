@@ -5,12 +5,13 @@
     <%- include("../partials/nav.ejs")%>
     <div class="content blogs">
        <h1>ALL BLOGS</h1>
-         <% blogs.forEach(blog=>{ %>
-          <h3> <%= blog.title%> </h3>
-          <p><%=  blog.snippet%></p>
-        
-         <%  } )  %>
-    </div>
+       <% blogs.forEach(blog => { %>
+        <div class="blog-summary">
+          <h2><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h2>
+          <p><%= blog.snippet %></p>
+        </div>
+      <% }) %>
+      
 
 
 
