@@ -7,6 +7,12 @@
   <h1><%= blog.title %></h1>
   <p><strong>Snippet:</strong> <%= blog.snippet %></p>
   <p><%= blog.body %></p>
+
+  <a href="/blogs/<%= blog._id %>/edit"><button>Edit Blog</button></a>
+
+  <form action="/blogs/<%= blog._id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this blog?');" style="margin-top: 1rem;">
+    <button type="submit" style="background-color: red; color: white;">Delete Blog</button>
+  </form>
 </div>
 </body>
 </html>
