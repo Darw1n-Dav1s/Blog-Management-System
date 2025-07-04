@@ -45,14 +45,6 @@ This is a simple blog management system built using Node.js, Express.js, MongoDB
    ```
 5. Open `http://localhost:3000` in your browser.
 
-## 🔥 Usage
-- `GET /` → Redirects to `/blogs`
-- `GET /blogs` → Fetch all blog posts
-- `POST /blogs` → Create a new blog post
-- `GET /blogs/create` → Form to create a blog post
-- `GET /about` → About page
-- `GET /about-us` → Redirects to `/about`
-
 ## 📁 Folder Structure
 ```
 📦 Blog Management System
